@@ -2,7 +2,10 @@
 <resources>
 
     <string name="app_name">Arlam</string>
+    <string name="action_settings">title</string>
    	<string name="wecker">Wecker:</string>
    	<string name="uhrzeit">Uhrzeit auswählen:</string>
-
+   	<string name="wecker_aktivieren">Wecker aktivieren</string>
+	<string name="wecker_deaktivieren">Wecker deaktivieren</string>
+	
 </resources>

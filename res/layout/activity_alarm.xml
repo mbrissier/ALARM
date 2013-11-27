@@ -1,16 +1,20 @@
 
-
-    <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+	<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+   
+    <TableLayout 
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent" >
+        android:layout_height="wrap_content" >
   
 
         <TableRow
             android:id="@+id/tableRow1"
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/row_width"
             android:layout_height="@dimen/row_height"
-            android:layout_margin="@dimen/row_margin" >
+            android:layout_marginLeft="@dimen/row_margin"
+            android:layout_marginRight="@dimen/row_margin"
+            android:layout_marginTop="@dimen/row_margin" >
 
             <TextView
                 android:id="@+id/textView_alarm"
@@ -21,10 +25,26 @@
                 android:textSize="@dimen/header_text_size" />
 
         </TableRow>
-
+		
+		<TableRow
+            android:id="@+id/tableRow1_2"
+            android:layout_width="@dimen/row_width"
+            android:layout_height="@dimen/row_height"
+            android:layout_marginLeft="@dimen/row_margin"
+            android:layout_marginRight="@dimen/row_margin"
+            android:layout_marginBottom="@dimen/row_margin" >
+        
+        <View
+            android:id="@+id/view_line"
+            android:layout_width="@dimen/row_width"
+            android:layout_height="2dp" 
+            android:background="@color/color_black_line"/>
+        
+        </TableRow>
+        
         <TableRow
             android:id="@+id/tableRow2"
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/row_width"
             android:layout_height="@dimen/row_height"
             android:layout_marginLeft="@dimen/row_margin"
             android:layout_marginRight="@dimen/row_margin"
@@ -41,7 +61,7 @@
 
         <TableRow
             android:id="@+id/tableRow3"
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/row_width"
             android:layout_height="@dimen/row_height"
             android:layout_margin="@dimen/row_margin" >
 
@@ -54,9 +74,44 @@
 
         <TableRow
             android:id="@+id/tableRow4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" >
-        </TableRow>
-    </TableLayout>
+            android:layout_width="@dimen/row_width"
+            android:layout_height="@dimen/row_height"
+            android:layout_marginLeft="@dimen/row_margin"
+            android:layout_marginRight="@dimen/row_margin"
+            android:layout_marginTop="@dimen/row_margin" >
 
+            <Button
+                android:id="@+id/button_alarm_activate"
+                android:layout_width="@dimen/button_width"
+            	android:layout_height="@dimen/button_height"
+                android:text="@string/wecker_aktivieren"
+                android:background="@color/color_button"
+                android:layout_margin="1dp" />
+            
+            <View
+            android:id="@+id/view_activate"
+            android:layout_width="50dp"
+            android:layout_height="@dimen/button_height" 
+            android:background="@color/color_black_line"/>
+
+        </TableRow>
+        
+         <TableRow
+            android:id="@+id/tableRow5"
+            android:layout_width="@dimen/row_width"
+            android:layout_height="@dimen/row_height"
+            android:layout_marginLeft="@dimen/row_margin"
+            android:layout_marginRight="@dimen/row_margin"
+            android:layout_marginBottom="@dimen/row_margin" >
+            
+              <Button
+                android:id="@+id/button_alarm_deactivate"
+                android:text="@string/wecker_deaktivieren"
+              	android:layout_width="@dimen/button_width"
+            	android:background="@color/color_button"
+            	android:layout_margin="1dp"/>
+              
+          </TableRow>
+    </TableLayout>
+</ScrollView>
 

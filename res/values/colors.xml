@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="color_activate" >#01DF3A</color>
+    <color name="color_deactivate" >#DF0101</color>
+    <color name="color_black_line" >#000000</color>
+    <color name="color_button" >#848484</color>
+ 
+    
+</resources>
