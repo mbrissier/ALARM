@@ -1,0 +1,62 @@
+
+
+    <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+  
+
+        <TableRow
+            android:id="@+id/tableRow1"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/row_height"
+            android:layout_margin="@dimen/row_margin" >
+
+            <TextView
+                android:id="@+id/textView_alarm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/wecker"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="@dimen/header_text_size" />
+
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow2"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/row_height"
+            android:layout_marginLeft="@dimen/row_margin"
+            android:layout_marginRight="@dimen/row_margin"
+            android:layout_marginTop="@dimen/row_margin">
+
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/uhrzeit"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow3"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/row_height"
+            android:layout_margin="@dimen/row_margin" >
+
+            <TimePicker
+                android:id="@+id/timePicker1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+        </TableRow>
+    </TableLayout>
+
+
