@@ -7,5 +7,6 @@
    	<string name="uhrzeit">Uhrzeit auswählen:</string>
    	<string name="wecker_aktivieren">Wecker aktivieren</string>
 	<string name="wecker_deaktivieren">Wecker deaktivieren</string>
+	<string name="uhrzeit_bis_alarm">Zeit bis Alarm:</string>
 	
 </resources>

@@ -47,8 +47,8 @@
             android:layout_width="@dimen/row_width"
             android:layout_height="@dimen/row_height"
             android:layout_marginLeft="@dimen/row_margin"
-            android:layout_marginRight="@dimen/row_margin"
-            android:layout_marginTop="@dimen/row_margin">
+            android:layout_marginRight="@dimen/row_margin" >
+            
 
             <TextView
                 android:id="@+id/textView1"
@@ -66,12 +66,51 @@
             android:layout_margin="@dimen/row_margin" >
 
             <TimePicker
-                android:id="@+id/timePicker1"
+                android:id="@+id/timePicker"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
         </TableRow>
 
+        
+        
+        <TableRow
+            android:id="@+id/tableRow3_1"
+            android:layout_width="@dimen/row_width"
+            android:layout_height="@dimen/row_height"
+            android:layout_marginLeft="@dimen/row_margin"
+            android:layout_marginRight="@dimen/row_margin" >  
+           
+            
+            <TextView 
+                android:id="@+id/textView_time_until_alarm_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/uhrzeit_bis_alarm" 
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+            
+            
+            
+        </TableRow>
+
+        <TableRow 
+            android:id="@+id/tableRow3_2"
+            android:layout_width="@dimen/row_width"
+            android:layout_height="@dimen/row_height"
+            android:layout_marginLeft="@dimen/row_margin"
+            android:layout_marginRight="@dimen/row_margin" >
+            
+            <TextView 
+                android:id="@+id/textView_time_until_alarm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:visibility="visible" />
+            
+            
+            
+        </TableRow>
+        
         <TableRow
             android:id="@+id/tableRow4"
             android:layout_width="@dimen/row_width"
@@ -91,8 +130,10 @@
             <View
             android:id="@+id/view_activate"
             android:layout_width="50dp"
-            android:layout_height="@dimen/button_height" 
-            android:background="@color/color_black_line"/>
+            android:layout_height="@dimen/drawable_height" 
+            android:background="@drawable/alarm_on"
+            android:layout_margin="1dp"
+            android:visibility="invisible" />
 
         </TableRow>
         
@@ -107,9 +148,19 @@
               <Button
                 android:id="@+id/button_alarm_deactivate"
                 android:text="@string/wecker_deaktivieren"
-              	android:layout_width="@dimen/button_width"
-            	android:background="@color/color_button"
-            	android:layout_margin="1dp"/>
+              	android:background="@color/color_button"
+            	android:layout_margin="1dp"
+            	android:layout_width="@dimen/button_width"
+            	android:layout_height="@dimen/button_height" />
+              
+              
+              <View
+            	android:id="@+id/view_deactivate"
+           		android:layout_width="50dp"
+            	android:layout_height="@dimen/drawable_height" 
+            	android:background="@drawable/alarm_off"
+            	android:layout_margin="1dp"
+            	android:visibility="invisible" />
               
           </TableRow>
     </TableLayout>
