@@ -116,8 +116,7 @@
             android:layout_width="@dimen/row_width"
             android:layout_height="@dimen/row_height"
             android:layout_marginLeft="@dimen/row_margin"
-            android:layout_marginRight="@dimen/row_margin"
-            android:layout_marginTop="@dimen/row_margin" >
+            android:layout_marginRight="@dimen/row_margin" >
 
             <Button
                 android:id="@+id/button_alarm_activate"
@@ -132,8 +131,7 @@
             android:layout_width="50dp"
             android:layout_height="@dimen/drawable_height" 
             android:background="@drawable/alarm_on"
-            android:layout_margin="1dp"
-            android:visibility="invisible" />
+            android:layout_margin="1dp" />
 
         </TableRow>
         
@@ -159,8 +157,7 @@
            		android:layout_width="50dp"
             	android:layout_height="@dimen/drawable_height" 
             	android:background="@drawable/alarm_off"
-            	android:layout_margin="1dp"
-            	android:visibility="invisible" />
+            	android:layout_margin="1dp" />
               
           </TableRow>
     </TableLayout>
