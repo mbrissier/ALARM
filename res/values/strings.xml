@@ -1,12 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Arlam</string>
+    <string name="app_name">Alarm</string>
     <string name="action_settings">title</string>
-   	<string name="wecker">Wecker:</string>
-   	<string name="uhrzeit">Uhrzeit auswählen:</string>
-   	<string name="wecker_aktivieren">Wecker aktivieren</string>
-	<string name="wecker_deaktivieren">Wecker deaktivieren</string>
-	<string name="uhrzeit_bis_alarm">Zeit bis Alarm:</string>
-	
+    <string name="wecker">Wecker:</string>
+    <string name="uhrzeit">Uhrzeit auswählen:</string>
+    <string name="wecker_aktivieren">Wecker aktivieren</string>
+    <string name="wecker_deaktivieren">Wecker deaktivieren</string>
+    <string name="uhrzeit_bis_alarm">Zeit bis Alarm:</string>
+    <string name="title_activity_snooze">Snooze</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="snooze">Snooze</string>
+    <string name="alarm">Alarm!</string>
+    <string name="title_activity_main">MainActivity</string>
+
 </resources>

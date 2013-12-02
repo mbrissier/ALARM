@@ -1,9 +1,6 @@
 package com.example.arlam;
 
-import android.media.MediaPlayer;
 import android.os.CountDownTimer;
-import android.os.SystemClock;
-import android.view.View;
 
 public class MyCount extends CountDownTimer {
 	

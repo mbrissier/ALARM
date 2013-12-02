@@ -22,6 +22,19 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="com.example.arlam.Snooze"
+            android:label="@string/title_activity_snooze" >
+        </activity>
+        <activity
+            android:name="com.example.arlam.MainActivity"
+            android:label="@string/title_activity_main" >
+        </activity>
+        
+        <service android:name=".MyAlarmService"
+                 android:enabled="true" />
+        <receiver
+            android:name="com.example.arlam.MyReceiver" />
     </application>
 
 </manifest>
