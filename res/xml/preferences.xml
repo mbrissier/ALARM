@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory 
+        android:title="@string/einstellungen1"
+        android:key="first_category">
+        
+       
+        <EditTextPreference
+            android:key="snoozeInterval"
+            android:title="@string/snoozeInterval" 
+            android:summary="@string/snoozeInterval"
+            android:dialogTitle="@string/snoozeInterval"
+            android:dialogMessage="@string/snoozeInterval"    
+            android:numeric="integer"
+            android:defaultValue="5" />
+
+    </PreferenceCategory>
+    
+</PreferenceScreen>

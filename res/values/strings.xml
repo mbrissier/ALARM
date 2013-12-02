@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name">Alarm</string>
-    <string name="action_settings">title</string>
+    <string name="action_settings">Einstellungen</string>
     <string name="wecker">Wecker:</string>
     <string name="uhrzeit">Uhrzeit auswählen:</string>
     <string name="wecker_aktivieren">Wecker aktivieren</string>
@@ -13,5 +13,8 @@
     <string name="snooze">Snooze</string>
     <string name="alarm">Alarm!</string>
     <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_setting">Setting</string>
+    <string name="snoozeInterval">Snooze Interval (min)</string>
+    <string name="einstellungen1">Einstellungen</string>
 
 </resources>

@@ -6,16 +6,21 @@ import java.util.Calendar;
 
 import android.app.Activity;
 import android.app.AlarmManager;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.media.MediaPlayer;
+
 import android.os.Bundle;
-import android.os.SystemClock;
+
 import android.preference.PreferenceManager;
-import android.support.v4.content.LocalBroadcastManager;
+
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -24,17 +29,17 @@ import android.widget.TimePicker;
 
 public class Alarm extends Activity {
 
-	private static final long DAYINMILLISECOND = 86400000;
+	private static final int DAYINMILLISECOND = 86400000;
 
 	Button activateButton;
 	Button deactivateButton;
-	static View activateView;
-	static View deactivateView;
+	View activateView;
+	View deactivateView;
 	TimePicker timepicker;
 	static TextView timePassed;
 	SharedPreferences sharedPrefs;
-	MyCount counter;
-	
+	static MyCount counter;
+
 	Intent intent;
 	PendingIntent pendingIntent;
 	AlarmManager alarmManger;
@@ -43,7 +48,7 @@ public class Alarm extends Activity {
 	long timeUntilAlarm;
 	long currentTimeMilliSecond;
 	long alarmTime;
-	boolean alarmIsSet;
+
 	static long seconds;
 
 	Calendar c = Calendar.getInstance();
@@ -64,13 +69,16 @@ public class Alarm extends Activity {
 		activateView = findViewById(R.id.view_activate);
 		deactivateView = findViewById(R.id.view_deactivate);
 
+		boolean status_prefs = loadSavedPreferences();
+
+		Log.v("SharedPrefrences_alarmIsSet:", "" + status_prefs);
 		if (loadSavedPreferences()) {
 
 			activateView.setVisibility(View.VISIBLE);
 			deactivateView.setVisibility(View.INVISIBLE);
 		} else {
-			activateView.setVisibility(View.VISIBLE);
-			deactivateView.setVisibility(View.INVISIBLE);
+			activateView.setVisibility(View.INVISIBLE);
+			deactivateView.setVisibility(View.VISIBLE);
 		}
 
 		timepicker = (TimePicker) findViewById(R.id.timePicker);
@@ -81,49 +89,62 @@ public class Alarm extends Activity {
 		activateButton.setOnClickListener(activateListener);
 		deactivateButton.setOnClickListener(deactivateListener);
 
-		
-
 		sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
+		cancelNotification(Alarm.this, Snooze.MY_NOTIFICATION_ID);
+		
+		setSnooze(loadSavedPreferencesGetSnoozeTime());
 	}
 
 	OnClickListener activateListener = new OnClickListener() {
 		@Override
 		public void onClick(View v) {
 
-			cal = Calendar.getInstance();
-			cal.set(Calendar.HOUR_OF_DAY, timepicker.getCurrentHour());
-			cal.set(Calendar.MINUTE, timepicker.getCurrentMinute());
+			
+			if (!loadSavedPreferences()) {
+				cal = Calendar.getInstance();
+				cal.set(Calendar.HOUR_OF_DAY, timepicker.getCurrentHour());
+				cal.set(Calendar.MINUTE, timepicker.getCurrentMinute());
 
-			alarmTime = cal.getTimeInMillis();
-			Log.v("Alarm.alarmTime:", "" + alarmTime);
-			Log.v("Alarm.hours:", "" + hours);
-			Log.v("Alarm.alarmTimeDate:",
-					"" + getDate(alarmTime, "HH:mm:ss.SSS"));
+				alarmTime = cal.getTimeInMillis();
+				Log.v("Alarm.alarmTime:", "" + alarmTime);
+				Log.v("Alarm.hours:", "" + hours);
+				Log.v("Alarm.alarmTimeDate:",
+						"" + getDate(alarmTime, "HH:mm:ss.SSS"));
 
-			currentTimeMilliSecond = System.currentTimeMillis();
-			Log.v("Alarm.currentTimeMilliSecond:", "" + currentTimeMilliSecond);
+				currentTimeMilliSecond = System.currentTimeMillis();
+				Log.v("Alarm.currentTimeMilliSecond:", ""
+						+ currentTimeMilliSecond);
 
-			timeUntilAlarm = alarmTime - currentTimeMilliSecond;
-			Log.v("Alarm.timeUntilAlarm:", "" + timeUntilAlarm);
+				timeUntilAlarm = alarmTime - currentTimeMilliSecond;
+				Log.v("Alarm.timeUntilAlarm:", "" + timeUntilAlarm);
 
-			if (timeUntilAlarm < 0)
-				timeUntilAlarm = DAYINMILLISECOND + timeUntilAlarm;
+				if (timeUntilAlarm < 0)
+					timeUntilAlarm = DAYINMILLISECOND + timeUntilAlarm;
 
-			counter = new MyCount(timeUntilAlarm, 1000);
-			if (loadSavedPreferences()) {
+				counter = new MyCount(timeUntilAlarm, 1000);
+
+				counter.start();
+				savePreferences("alarmStatus", true);
+				sendAlarm();
+
+				deactivateView.setVisibility(View.INVISIBLE);
+				activateView.setVisibility(View.VISIBLE);
+
+			} else {
+
+				savePreferences("alarmStatus", false);
+				deactivateView.setVisibility(View.VISIBLE);
+				activateView.setVisibility(View.INVISIBLE);
+
+				counter = new MyCount(0, 1000);
 
 				counter.cancel();
 				counter.onFinish();
 
+				cancelAlarm();
+
 			}
-			counter.start();
-
-			deactivateView.setVisibility(View.INVISIBLE);
-			activateView.setVisibility(View.VISIBLE);
-
-			savePreferences("alarmStatus", true);
-			sendAlarm();
 
 		}
 	};
@@ -132,19 +153,17 @@ public class Alarm extends Activity {
 		@Override
 		public void onClick(View v) {
 
-			if (loadSavedPreferences()) {
-				counter.cancel();
-				counter.onFinish();
+			savePreferences("alarmStatus", false);
+			deactivateView.setVisibility(View.VISIBLE);
+			activateView.setVisibility(View.INVISIBLE);
 
-				activateView.setVisibility(View.INVISIBLE);
-				deactivateView.setVisibility(View.VISIBLE);
+			counter = new MyCount(0, 1000);
 
-				savePreferences("alarmStatus", true);
-			} else {
-				savePreferences("alarmStatus", false);
+			counter.cancel();
+			counter.onFinish();
 
-			}
-			;
+			cancelAlarm();
+
 		}
 	};
 
@@ -187,8 +206,6 @@ public class Alarm extends Activity {
 		return formatter.format(calendar.getTime());
 	}
 
-	
-
 	private void savePreferences(String key, boolean value) {
 
 		SharedPreferences sharedPreferences = PreferenceManager
@@ -203,26 +220,117 @@ public class Alarm extends Activity {
 
 		SharedPreferences sharedPreferences = PreferenceManager
 				.getDefaultSharedPreferences(this);
-		alarmIsSet = sharedPreferences.getBoolean("alarmStatus", false);
+		boolean alarmIsSet = sharedPreferences.getBoolean("alarmStatus", false);
 
 		return alarmIsSet;
+	}
+	
+	private boolean loadSavedPreferencesSnooze() {
+
+		SharedPreferences sharedPreferences = PreferenceManager
+				.getDefaultSharedPreferences(this);
+		boolean snoozeIsSet = sharedPreferences.getBoolean("snoozeAktiviert", false);
+
+		return snoozeIsSet;
+	}
+
+	private int loadSavedPreferencesGetSnoozeTime() {
+
+		SharedPreferences sharedPreferences = PreferenceManager
+				.getDefaultSharedPreferences(this);
+		String snoozeIsSet = sharedPreferences.getString("snoozeInterval", "5");
+		int snoozeTime = Integer.parseInt(snoozeIsSet);
+		return snoozeTime;
+	}
+	
+	private void cancelAlarm() {
+
+		intent = new Intent(Alarm.this, MyReceiver.class);
+		pendingIntent = PendingIntent.getBroadcast(Alarm.this, 0, intent,
+				PendingIntent.FLAG_UPDATE_CURRENT);
+
+		AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+		alarmManager.cancel(pendingIntent);
+
 	}
 
 	private void sendAlarm() {
 
 		Log.v("Alarm", "Broadcast Alarm");
-		
-		Calendar calendar = Calendar.getInstance();
-
-        calendar.setTimeInMillis(alarmTime);
-
-        
 
 		intent = new Intent(Alarm.this, MyReceiver.class);
-		pendingIntent = PendingIntent.getBroadcast(Alarm.this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+		pendingIntent = PendingIntent.getBroadcast(Alarm.this, 0, intent,
+				PendingIntent.FLAG_CANCEL_CURRENT);
 
-		AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-		alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+		if (timeUntilAlarm < 0) {
+
+			Calendar cal = Calendar.getInstance();
+			cal.add(Calendar.MILLISECOND, DAYINMILLISECOND);
+
+			AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+			alarmManager.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(),
+					pendingIntent);
+
+		} else {
+
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTimeInMillis(alarmTime);
+
+			AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+			alarmManager.set(AlarmManager.RTC_WAKEUP,
+					calendar.getTimeInMillis(), pendingIntent);
+		}
+
+	}
+
+	/**
+	 * Menu wird aufgebaut
+	 */
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.alarm, menu);
+		return true;
+	}
+
+	/**
+	 * Wenn ein Menu-Item ausgewaehlt wird
+	 */
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+
+		switch (item.getItemId()) {
+
+		case R.id.action_settings:
+
+			// Start der Setting Activity
+			Intent intent = new Intent(this, Setting.class);
+			// Start der Setting_main, der rueckgabe wert wird ueber die shared
+			// preferences ausgelesen
+			startActivity(intent);
+
+			return true;
+
+		default:
+
+			return super.onOptionsItemSelected(item);
+		}
+	}
+	
+	public static void cancelNotification(Context ctx, int notifyId) {
+	    String ns = Context.NOTIFICATION_SERVICE;
+	    NotificationManager nMgr = (NotificationManager) ctx.getSystemService(ns);
+	    nMgr.cancel(notifyId);
+	}
+	
+	public void setSnooze(int milliseconds) {
+		
+		if(loadSavedPreferencesSnooze()){
+			
+			timePassed.setText("Snooze Time will elapse in: " + loadSavedPreferencesGetSnoozeTime());
+			
+		}
 		
 	}
 }
