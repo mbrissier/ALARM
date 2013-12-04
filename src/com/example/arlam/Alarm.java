@@ -4,6 +4,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+
+
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.NotificationManager;
@@ -26,10 +28,12 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 public class Alarm extends Activity {
 
 	private static final int DAYINMILLISECOND = 86400000;
+	
 
 	Button activateButton;
 	Button deactivateButton;
@@ -38,7 +42,7 @@ public class Alarm extends Activity {
 	TimePicker timepicker;
 	static TextView timePassed;
 	SharedPreferences sharedPrefs;
-	static MyCount counter;
+	
 
 	Intent intent;
 	PendingIntent pendingIntent;
@@ -48,6 +52,7 @@ public class Alarm extends Activity {
 	long timeUntilAlarm;
 	long currentTimeMilliSecond;
 	long alarmTime;
+	int snoozeTime;
 
 	static long seconds;
 
@@ -93,7 +98,10 @@ public class Alarm extends Activity {
 
 		cancelNotification(Alarm.this, Snooze.MY_NOTIFICATION_ID);
 		
-		setSnooze(loadSavedPreferencesGetSnoozeTime());
+		if(loadSavedPreferencesSnooze()) {
+		
+		setSnooze();
+		}
 	}
 
 	OnClickListener activateListener = new OnClickListener() {
@@ -122,9 +130,9 @@ public class Alarm extends Activity {
 				if (timeUntilAlarm < 0)
 					timeUntilAlarm = DAYINMILLISECOND + timeUntilAlarm;
 
-				counter = new MyCount(timeUntilAlarm, 1000);
-
-				counter.start();
+				
+				timePassed.setText(formatTime(timeUntilAlarm)); 
+				
 				savePreferences("alarmStatus", true);
 				sendAlarm();
 
@@ -133,16 +141,8 @@ public class Alarm extends Activity {
 
 			} else {
 
-				savePreferences("alarmStatus", false);
-				deactivateView.setVisibility(View.VISIBLE);
-				activateView.setVisibility(View.INVISIBLE);
-
-				counter = new MyCount(0, 1000);
-
-				counter.cancel();
-				counter.onFinish();
-
-				cancelAlarm();
+				Toast.makeText(Alarm.this, "Alarm bereits gesetzt!",
+						Toast.LENGTH_SHORT).show();
 
 			}
 
@@ -154,13 +154,11 @@ public class Alarm extends Activity {
 		public void onClick(View v) {
 
 			savePreferences("alarmStatus", false);
+			savePreferences("SnoozeAktiviert", false);
 			deactivateView.setVisibility(View.VISIBLE);
 			activateView.setVisibility(View.INVISIBLE);
 
-			counter = new MyCount(0, 1000);
-
-			counter.cancel();
-			counter.onFinish();
+			timePassed.setText("");
 
 			cancelAlarm();
 
@@ -225,16 +223,16 @@ public class Alarm extends Activity {
 		return alarmIsSet;
 	}
 	
-	private boolean loadSavedPreferencesSnooze() {
+	public boolean loadSavedPreferencesSnooze() {
 
 		SharedPreferences sharedPreferences = PreferenceManager
 				.getDefaultSharedPreferences(this);
-		boolean snoozeIsSet = sharedPreferences.getBoolean("snoozeAktiviert", false);
+		boolean snoozeIsSet = sharedPreferences.getBoolean("SnoozeAktiviert", false);
 
 		return snoozeIsSet;
 	}
 
-	private int loadSavedPreferencesGetSnoozeTime() {
+	public int loadSavedPreferencesGetSnoozeTime() {
 
 		SharedPreferences sharedPreferences = PreferenceManager
 				.getDefaultSharedPreferences(this);
@@ -324,13 +322,25 @@ public class Alarm extends Activity {
 	    nMgr.cancel(notifyId);
 	}
 	
-	public void setSnooze(int milliseconds) {
+	public void setSnooze() {
 		
-		if(loadSavedPreferencesSnooze()){
+		
 			
-			timePassed.setText("Snooze Time will elapse in: " + loadSavedPreferencesGetSnoozeTime());
+			timePassed.setText("Snooze in: " + loadSavedPreferencesGetSnoozeTime());
 			
-		}
+			intent = new Intent(Alarm.this, MyReceiver.class);
+			pendingIntent = PendingIntent.getBroadcast(Alarm.this, 0, intent,
+					PendingIntent.FLAG_CANCEL_CURRENT);
+			
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTimeInMillis(System.currentTimeMillis());
+			calendar.add(Calendar.MINUTE, loadSavedPreferencesGetSnoozeTime());
+
+			AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+			alarmManager.set(AlarmManager.RTC_WAKEUP,
+					calendar.getTimeInMillis(), pendingIntent);
+			
+		
 		
 	}
 }

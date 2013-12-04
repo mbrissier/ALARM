@@ -25,6 +25,7 @@ public class Snooze extends Activity {
 	Button snooze;
 	TaskStackBuilder stackBuilder;
 	String snoozeTime;
+	
 	Alarm alarm;
 
 	@Override
@@ -43,7 +44,7 @@ public class Snooze extends Activity {
 				.getDefaultSharedPreferences(this);
 		snoozeTime = sharedPrefs.getString("snoozeInterval", "5");
 		
-		savePreferences("SnoozeAktiviert", true);
+		
 
 	}
 
@@ -59,7 +60,7 @@ public class Snooze extends Activity {
 					.setSmallIcon(R.drawable.alarm_on)
 					.setContentTitle("Alarm")
 					.setContentText(
-							"Snooze aktiviert, Wecker klingelt in: " + snoozeTime + " Minuten wieder");
+							"Snooze aktiviert, in: " + snoozeTime + " Min");
 								
 			// Creates an explicit intent for an Activity in your app
 			Intent resultIntent = new Intent(Snooze.this, Alarm.class);
@@ -77,12 +78,17 @@ public class Snooze extends Activity {
 			stackBuilder.addNextIntent(resultIntent);
 			PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(
 					0, PendingIntent.FLAG_UPDATE_CURRENT);
+			
 			mBuilder.setContentIntent(resultPendingIntent);
 			NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
 			// mId allows you to update the notification later on.
-
+			
+			savePreferences("SnoozeAktiviert", true);
 			mNotificationManager.notify(MY_NOTIFICATION_ID, mBuilder.build());
+			
+			finish();
+			
 
 		}
 
